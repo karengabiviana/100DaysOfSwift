@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
-    var questionAsked = 0
+    var rounds = 0
     var message =  ""
     
     override func viewDidLoad() {
@@ -55,7 +55,7 @@ class ViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Score: \(score.description)")
         
         correctAnswer = Int.random(in:0...2)
-        title = "\(countries[correctAnswer].uppercased())- Times: \(questionAsked)"
+        title = (countries[correctAnswer].uppercased())
         }
 
     @IBAction func buttonTapped(_ sender: UIButton) {
@@ -67,22 +67,24 @@ class ViewController: UIViewController {
             score += 1
         } else {
             title = "Wrong! \n That’s the flag of \(countries[sender.tag].uppercased())"
-            
             score -= 1
         }
-            
-        questionAsked += 1
+        
+        //Tracking number of rounds
+        rounds += 1
         
         let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
                 
                 present(ac, animated: true)
-       
-        if questionAsked == 10{
-            ac.message = "Game over"
-            ac.addAction(UIAlertAction(title: "Game Over", style: .default, handler: askQuestion))
-        }
         
+        //After 10 rounds message alert change
+        if rounds == 10{
+            ac.title = "Game Over"
+            ac.message =  "After 10 rounds \n Your final score is \(score)"
+        }
+
     }
+        
 }
 
