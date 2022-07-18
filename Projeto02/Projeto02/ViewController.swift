@@ -16,12 +16,14 @@ class ViewController: UIViewController {
     var score = 0
     var correctAnswer = 0
     var questionAsked = 0
-    
+    var message =  ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain","uk", "us"]
+        
+        
         
         //border
         button1.layer.borderWidth = 1
@@ -31,6 +33,11 @@ class ViewController: UIViewController {
         button1.layer.borderColor = UIColor.lightGray.cgColor
         button2.layer.borderColor = UIColor.lightGray.cgColor
         button3.layer.borderColor = UIColor.lightGray.cgColor
+        
+        button1.imageView?.contentMode = .scaleAspectFill
+        
+        button1.backgroundColor = .gray
+        
         
         askQuestion(action: nil)
         
@@ -53,21 +60,29 @@ class ViewController: UIViewController {
 
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String
-                
+        message = "Your score is \(score)"
+        
         if sender.tag == correctAnswer {
             title = "Correct"
             score += 1
         } else {
-            title = "Wrong"
+            title = "Wrong! \n That’s the flag of \(countries[sender.tag].uppercased())"
+            
             score -= 1
         }
             
         questionAsked += 1
         
-        let ac = UIAlertController(title: title, message: "Your score is \(score)", preferredStyle: .alert)
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
                 
                 present(ac, animated: true)
+       
+        if questionAsked == 10{
+            ac.message = "Game over"
+            ac.addAction(UIAlertAction(title: "Game Over", style: .default, handler: askQuestion))
+        }
+        
     }
 }
 
