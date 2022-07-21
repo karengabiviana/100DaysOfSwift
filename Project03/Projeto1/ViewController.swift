@@ -19,6 +19,7 @@ class ViewController: UITableViewController {
         
         title = "Storm Viewer"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
         
         //FileManager is a data type using to look for files
         let fm = FileManager.default
@@ -35,7 +36,6 @@ class ViewController: UITableViewController {
                 pictures.append(item)
             }
         }
-        print(pictures)
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return pictures.count
@@ -55,6 +55,12 @@ class ViewController: UITableViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
-
+    @objc func shareTapped() {
+        let url = URL(string: "https://itunes.apple.com/app/idxxxxxxxxxx")
+        let items: [Any] = [url, title]
+        let vc = UIActivityViewController(activityItems: items, applicationActivities: [])
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(vc, animated: true)
+    }
 }
 

@@ -52,11 +52,16 @@ class ViewController: UIViewController {
         button3.setImage(UIImage(named: countries[2]), for: .normal)
         
         //Score on Navigation Bar
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Score: \(score.description)")
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Score", style: .plain, target: self, action: #selector(showScore))
         
         correctAnswer = Int.random(in:0...2)
         title = (countries[correctAnswer].uppercased())
         }
+    
+    @objc func showScore() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Score: \(score.description)")
+    }
 
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String
