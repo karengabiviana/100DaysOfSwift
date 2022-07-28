@@ -36,9 +36,6 @@ class ViewController: UIViewController {
         
         button1.imageView?.contentMode = .scaleAspectFill
         
-        button1.backgroundColor = .gray
-        
-        
         askQuestion(action: nil)
         
     }
