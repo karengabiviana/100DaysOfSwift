@@ -17,7 +17,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
     }()
     
     var progressView: UIProgressView!
-    var websites = ["apple.com", "hackingwithswift.com"]
+    var websites = ["apple.com", "hackingwithswift.com", "gooogle.com"]
     
     override func loadView() {
         view = webView
@@ -26,6 +26,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Toolbar items
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.reload))
         
@@ -42,7 +43,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
         
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
         
-        //button on navigation bar Open
+        //button on navigation bar
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openTapped))
         
         let url = URL(string: "https://" + websites[0])!
@@ -87,10 +88,13 @@ class ViewController: UIViewController, WKNavigationDelegate {
                 if host.contains(website) {
                     decisionHandler(.allow)
                     return
+                } else {
+                    let ac = UIAlertController(title: "Ops...", message: "This site is blocked", preferredStyle: .alert)
+                    ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                    present(ac, animated: true)
                 }
             }
         }
         decisionHandler(.cancel)
     }
-    
 }
