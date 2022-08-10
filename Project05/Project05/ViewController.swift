@@ -106,6 +106,9 @@ class ViewController: UITableViewController {
     }
     
     func isOriginal(word: String) -> Bool {
+        if allWords.contains(word) {
+            return false
+        }
         return !useWords.contains(word)
     }
     
