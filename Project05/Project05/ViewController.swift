@@ -113,6 +113,9 @@ class ViewController: UITableViewController {
         let checker = UITextChecker()
         let range = NSRange(location: 0, length: word.utf16.count)
         let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
+        if range.length < 3 {
+            return false
+        }
         return misspelledRange.location == NSNotFound
     }
     
