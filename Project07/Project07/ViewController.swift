@@ -12,6 +12,9 @@ class ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(credits))
+        
         let urlString: String
         
         if navigationController?.tabBarItem.tag == 0 {
@@ -24,11 +27,15 @@ class ViewController: UITableViewController {
             if let data = try? Data(contentsOf: url) {
                 parse(json: data)
                 return
-                
             }
         }
-        
         showError()
+    }
+    
+    @objc func credits() {
+        let ac = UIAlertController(title: "Credits", message: "The data comes from the We The People API of the Whitehouse", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Ok", style: .default))
+        present(ac, animated: true)
     }
     
     func showError() {
