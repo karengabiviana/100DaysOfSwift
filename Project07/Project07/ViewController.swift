@@ -9,11 +9,13 @@ import UIKit
 
 class ViewController: UITableViewController {
     var petitions = [Petition]()
+    var filteredPetitions = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(credits))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchPrompt))
         
         let urlString: String
         
@@ -36,6 +38,26 @@ class ViewController: UITableViewController {
         let ac = UIAlertController(title: "Credits", message: "The data comes from the We The People API of the Whitehouse", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Ok", style: .default))
         present(ac, animated: true)
+    }
+    
+    @objc func searchPrompt() {
+        let ac = UIAlertController(title: "What do you looking for?", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        
+        let submitAction = UIAlertAction(title: "Submit", style: .default) {
+            [unowned self, ac] _ in
+            let answer = ac.textFields![0].text
+            self.submit(answer!)
+        }
+        ac.addAction(submitAction)
+        present(ac, animated: true)
+    }
+    
+    func submit(_ answer: String) {
+        // if petition has answer inside
+        // add to filteredPetitions array
+        // show filteredPetitions on viewDidLoad
+        
     }
     
     func showError() {
