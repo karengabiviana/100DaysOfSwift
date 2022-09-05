@@ -9,13 +9,14 @@ import UIKit
 
 class ViewController: UITableViewController {
     var petitions = [Petition]()
-    var filteredPetitions = [String]()
+    var filteredPetitions: [Petition]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(credits))
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchPrompt))
+        
         
         let urlString: String
         
@@ -44,20 +45,32 @@ class ViewController: UITableViewController {
         let ac = UIAlertController(title: "What do you looking for?", message: nil, preferredStyle: .alert)
         ac.addTextField()
         
+        let refresh = UIAlertAction (title: "Clear", style: .cancel) {
+            [unowned self] _ in
+            self.refreshView()
+        }
         let submitAction = UIAlertAction(title: "Submit", style: .default) {
             [unowned self, ac] _ in
             let answer = ac.textFields![0].text
             self.submit(answer!)
         }
         ac.addAction(submitAction)
+        ac.addAction(refresh)
         present(ac, animated: true)
     }
     
     func submit(_ answer: String) {
         // if petition has answer inside
         // add to filteredPetitions array
-        // show filteredPetitions on viewDidLoad
-        
+        filteredPetitions = petitions.filter {$0.title.contains(answer) || $0.body.contains(answer) }
+        // show filteredPetitions
+        tableView.reloadData()
+        // go back to the initial list
+    }
+    
+    func refreshView() {
+        filteredPetitions = nil
+        tableView.reloadData()
     }
     
     func showError() {
@@ -76,16 +89,17 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return petitions.count
+        filteredPetitions?.count ?? petitions.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let petition = petitions[indexPath.row]
-        cell.textLabel?.text = petition.title
-        cell.detailTextLabel?.text = petition.body
+        let petition = (filteredPetitions != nil ? filteredPetitions : petitions)?[indexPath.row]
+        cell.textLabel?.text = petition?.title
+        cell.detailTextLabel?.text = petition?.body
         return cell
     }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = DetailViewController()
         vc.detailItem = petitions[indexPath.row]
@@ -94,3 +108,5 @@ class ViewController: UITableViewController {
     
 }
 
+ 
+   
