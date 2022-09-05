@@ -1,3 +1,9 @@
 import UIKit
 
-var greeting = "Hello, playground"
+class ViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = "Hello World"
+    }
+}
