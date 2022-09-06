@@ -17,7 +17,11 @@ class ViewController: UIViewController {
     var activatedButtons = [UIButton]()
     var solutions = [String]()
     
-    var score = 0
+    var score = 0 {
+        didSet {
+            scoreLabel.text = "Score: \(score)"
+        }
+    }
     var level = 1
     
     override func loadView() {
@@ -208,6 +212,8 @@ class ViewController: UIViewController {
         
         cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
         answersLabel.text = solutionsString.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        letterBits.shuffle()
         
         if letterButtons.count == letterBits.count {
             for i in 0..<letterButtons.count {
