@@ -23,6 +23,8 @@ class ViewController: UIViewController {
         }
     }
     var level = 1
+
+    var correctAnswers = 0
     
     override func loadView() {
         view = UIView()
@@ -154,8 +156,9 @@ class ViewController: UIViewController {
             
             currentAnswer.text = ""
             score += 1
+            correctAnswers += 1
             
-            if score % 7 == 0 {
+            if correctAnswers == 7 {
                 let ac = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
                 
                 ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp))
@@ -165,6 +168,7 @@ class ViewController: UIViewController {
             let ac = UIAlertController(title: "Wrong Answer", message: "Please, try again!", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "OK", style: .default))
             present(ac, animated: true)
+            score -= 1
         }
     }
     
