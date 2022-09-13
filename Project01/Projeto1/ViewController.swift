@@ -17,9 +17,14 @@ class ViewController: UITableViewController {
         //super means this will run before we run ours
         super.viewDidLoad()
         
+        performSelector(inBackground: #selector(NSSLImages), with: nil)
+        
         title = "Storm Viewer"
         navigationController?.navigationBar.prefersLargeTitles = true
         
+    }
+    
+    @objc func NSSLImages() {
         //FileManager is a data type using to look for files
         let fm = FileManager.default
         // we will tell Bundle.main.resourcePath! the path of my files
@@ -35,8 +40,11 @@ class ViewController: UITableViewController {
                 pictures.append(item)
             }
         }
-        print(pictures)
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return pictures.count
     }
