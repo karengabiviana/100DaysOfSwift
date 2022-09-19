@@ -62,7 +62,10 @@ class ViewController: UITableViewController {
     func submit(_ answer: String) {
         // if petition has answer inside
         // add to filteredPetitions array
-        filteredPetitions = petitions.filter {$0.title.contains(answer) || $0.body.contains(answer) }
+        DispatchQueue.global().async{
+            self.filteredPetitions = self.petitions.filter {$0.title.contains(answer) || $0.body.contains(answer) }
+        }
+        
         // show filteredPetitions
         tableView.reloadData()
         // go back to the initial list
