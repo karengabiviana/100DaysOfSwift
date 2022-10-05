@@ -11,7 +11,15 @@ class ViewController: UIViewController {
     
     var allWords = [String]()
     var usedWords = [String]()
-    var labelTest = UILabel()
+    var mainLabel = UILabel()
+    var theWord = String()
+    var theSplitWord = [Character]()
+    var scoreLabel = UILabel()
+    var score = 0 {
+        didSet {
+            scoreLabel.text = "Score: \(score)"
+        }
+    }
     
     override func loadView() {
         view = UIView()
@@ -26,18 +34,27 @@ class ViewController: UIViewController {
         if allWords.isEmpty {
             allWords = ["silkworm"]
         }
+        // MARK: split string into character
+        theWord = allWords.randomElement() ?? "silkworm"
+        theSplitWord = Array(theWord)
+        
         
         
         // MARK: Labels
-        labelTest = UILabel()
-        labelTest.translatesAutoresizingMaskIntoConstraints = false
-        labelTest.text = allWords.randomElement()
+        mainLabel.translatesAutoresizingMaskIntoConstraints = false
+        mainLabel.text = theWord
         usedWords.removeAll(keepingCapacity: true)
-        view.addSubview(labelTest)
+        view.addSubview(mainLabel)
+        
+        scoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scoreLabel)
         
         // MARK: Constraints
         NSLayoutConstraint.activate([
-            labelTest.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mainLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            mainLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            scoreLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
             
         ])
     }
