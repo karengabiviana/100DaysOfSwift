@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     var mainLabel = UILabel()
     var theWord = String()
     var theSplitWord = [Character]()
+    var hideWord = [Character]()
     var scoreLabel = UILabel()
     var score = 0 {
         didSet {
@@ -34,15 +35,20 @@ class ViewController: UIViewController {
         if allWords.isEmpty {
             allWords = ["silkworm"]
         }
+        
         // MARK: split string into character
         theWord = allWords.randomElement() ?? "silkworm"
         theSplitWord = Array(theWord)
         
+        // MARK: hide word
+        for _ in theSplitWord {
+            hideWord.append(contentsOf: "?")
+        }
         
         
         // MARK: Labels
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
-        mainLabel.text = theWord
+        mainLabel.text = String(hideWord)
         usedWords.removeAll(keepingCapacity: true)
         view.addSubview(mainLabel)
         
