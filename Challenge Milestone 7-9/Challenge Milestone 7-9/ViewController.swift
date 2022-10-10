@@ -19,7 +19,6 @@ class ViewController: UIViewController {
     var mainLabel = UILabel()
     var scoreLabel = UILabel()
     
-    var letterButtons = [UIButton]()
     var activatedButtons = [UIButton]()
     
     var plus = UIButton()
@@ -68,9 +67,9 @@ class ViewController: UIViewController {
             mainLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             mainLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
-//            plus.centerXAnchor.constraint(equalTo: mainLabel.centerXAnchor),
-//            plus.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
-//            plus.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -160),
+            //            plus.centerXAnchor.constraint(equalTo: mainLabel.centerXAnchor),
+            //            plus.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
+            //            plus.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -160),
             
             buttonsView.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 40),
             buttonsView.leadingAnchor.constraint(greaterThanOrEqualTo:  view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -99,7 +98,7 @@ class ViewController: UIViewController {
     
     func manipulateTheWord() {
         splitWord = Array(theWord)
-    
+        
         for _ in splitWord {
             hideWord.append(contentsOf: "?")
         }
@@ -120,10 +119,10 @@ class ViewController: UIViewController {
     
     func configViews() {
         mistakesView.translatesAutoresizingMaskIntoConstraints = false
-//        mistakesView.backgroundColor = .orange
+        //        mistakesView.backgroundColor = .orange
         mistakesView.layer.cornerRadius = 16
         mistakesView.layer.borderWidth = 1
-//        mistakesView.layer.borderColor =
+        //        mistakesView.layer.borderColor =
         view.addSubview(mistakesView)
         
         
@@ -135,54 +134,54 @@ class ViewController: UIViewController {
         let width = 40
         let height = 40
         var i = 0
-
+        
         for row in 0..<4 {
             for column in 0..<7 {
-
+                
                 let letterButton = UIButton(type: .system)
                 letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
                 letterButton.tintColor = .black
                 letterButton.setTitle(String(buttonTitle[ i ]), for: .normal)
                 letterButton.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
-
+                
                 let frame = CGRect(x: column * width, y: row * height, width: width, height: height)
                 letterButton.frame = frame
-
+                
                 buttonsView.addSubview(letterButton)
-                letterButtons.append(letterButton)
                 i += 1
             }
-
+            
         }
     }
+    
     
     func plusButton() {
-                plus.translatesAutoresizingMaskIntoConstraints = false
-                plus.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
-                plus.backgroundColor = .orange
-                view.addSubview(plus)
+        plus.translatesAutoresizingMaskIntoConstraints = false
+        plus.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
+        plus.backgroundColor = .orange
+        view.addSubview(plus)
     }
     
-
-    @objc func letterTapped(_ sender: UIButton) {
+    
+    @objc func letterTapped() {
         
-//        let ac = UIAlertController(title: "Let's Go!", message: nil, preferredStyle: .alert)
-//        ac.addTextField()
-//
-//        let submitAction = UIAlertAction(title: "submit", style: .default) {
-//            [unowned self] _ in
-//            let answer = ac.textFields![0].text
-//            self.submit(answer!)
+        //        let ac = UIAlertController(title: "Let's Go!", message: nil, preferredStyle: .alert)
+        //        ac.addTextField()
+        //
+        //        let submitAction = UIAlertAction(title: "submit", style: .default) {
+        //            [unowned self] _ in
+        //            let answer = ac.textFields![0].text
+        //            self.submit(answer!)
+        //        }
+        //        ac.addAction(submitAction)
+        //        present(ac, animated: true)
+        
+//        let butttonTapped = Array(_immutableCocoaArray: sender.titleLabel!) ?? ["!"]
+        print("Passou")
+//        if theWord.contains(butttonTapped[0]){
+//            hideWord.append(contentsOf: butttonTapped[0])
+//            //            self.loadView()
 //        }
-//        ac.addAction(submitAction)
-//        present(ac, animated: true)
-        
-        let butttonTapped = Array(_immutableCocoaArray: sender.titleLabel!) ?? ["!"]
-
-        if theWord.contains(butttonTapped[0]){
-            hideWord.append(contentsOf: butttonTapped[0])
-//            self.loadView()
-        }
     }
     
     func submit(_ answer:String) {
@@ -191,9 +190,9 @@ class ViewController: UIViewController {
         
         if strAnswer != "!" {
             if splitWord.contains(charAnswer[0]) {
-            
+                
                 splitWord.append(contentsOf: strAnswer)
-            
+                
                 self.loadView()
             }
         }
