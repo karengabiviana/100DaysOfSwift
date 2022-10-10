@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     var usedWords = [String]()
     var theWord = String()
     
-    var theSplitWord = [Character]()
+    var splitWord = [Character]()
     var hideWord = [Character]()
     
     var mainLabel = UILabel()
@@ -22,8 +22,12 @@ class ViewController: UIViewController {
     var letterButtons = [UIButton]()
     var activatedButtons = [UIButton]()
     
+    var plus = UIButton()
+    
     var buttonsView = UIView()
     var mistakesView = UIView()
+    
+    let buttonTitle = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",  "U", "", "V", "W", "X", "Y", "Z", ""]
     
     
     var score = 0 {
@@ -36,48 +40,19 @@ class ViewController: UIViewController {
         view = UIView()
         view.backgroundColor = .white
         
-        // MARK: "database" logic
-        if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
-            if let startWords = try? String(contentsOf: startWordsURL){
-                allWords = startWords.components(separatedBy: "\n")
-            }
-        }
-        if allWords.isEmpty {
-            allWords = ["silkworm"]
-        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        // MARK: split string into character
-        theWord = allWords.randomElement() ?? "silkworm"
-        theSplitWord = Array(theWord)
+        integrateWordBase()
+        randomWord()
+        manipulateTheWord()
         
-        // MARK: hide word
-        for _ in theSplitWord {
-            hideWord.append(contentsOf: "?")
-        }
+        configLabels()
+        configViews()
+        configLettersButtons()
         
-        
-        // MARK: Config UI Elements
-        
-        scoreLabel.translatesAutoresizingMaskIntoConstraints = false
-        scoreLabel.text = "Score: \(score)"
-        scoreLabel.font = UIFont.systemFont(ofSize: 16)
-        view.addSubview(scoreLabel)
-        
-        mistakesView.translatesAutoresizingMaskIntoConstraints = false
-//        mistakesView.backgroundColor = .orange
-        mistakesView.layer.cornerRadius = 16
-        mistakesView.layer.borderWidth = 1
-//        mistakesView.layer.borderColor =
-        view.addSubview(mistakesView)
-        
-        mainLabel.translatesAutoresizingMaskIntoConstraints = false
-        mainLabel.text = String(hideWord)
-        mainLabel.font = UIFont.systemFont(ofSize: 24)
-        usedWords.removeAll(keepingCapacity: true)
-        view.addSubview(mainLabel)
-        
-        buttonsView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(buttonsView)
         
         // MARK: Constraints
         NSLayoutConstraint.activate([
@@ -93,55 +68,136 @@ class ViewController: UIViewController {
             mainLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             mainLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
-//            buttonsView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            plus.centerXAnchor.constraint(equalTo: mainLabel.centerXAnchor),
+//            plus.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
+//            plus.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -160),
+            
             buttonsView.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 40),
             buttonsView.leadingAnchor.constraint(greaterThanOrEqualTo:  view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             buttonsView.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
             
         ])
         
-        // MARK: Buttons
+    }
+    
+    
+    func integrateWordBase() {
+        if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
+            if let startWords = try? String(contentsOf: startWordsURL){
+                allWords = startWords.components(separatedBy: "\n")
+            }
+        }
+        
+        if allWords.isEmpty {
+            allWords = ["silkworm"]
+        }
+    }
+    
+    func randomWord() {
+        theWord = allWords.randomElement() ?? "silkworm"
+    }
+    
+    func manipulateTheWord() {
+        splitWord = Array(theWord)
+    
+        for _ in splitWord {
+            hideWord.append(contentsOf: "?")
+        }
+    }
+    
+    func configLabels() {
+        scoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        scoreLabel.text = "Score: \(score)"
+        scoreLabel.font = UIFont.systemFont(ofSize: 16)
+        view.addSubview(scoreLabel)
+        
+        mainLabel.translatesAutoresizingMaskIntoConstraints = false
+        mainLabel.text = String(splitWord)
+        mainLabel.font = UIFont.systemFont(ofSize: 24)
+        usedWords.removeAll(keepingCapacity: true)
+        view.addSubview(mainLabel)
+    }
+    
+    func configViews() {
+        mistakesView.translatesAutoresizingMaskIntoConstraints = false
+//        mistakesView.backgroundColor = .orange
+        mistakesView.layer.cornerRadius = 16
+        mistakesView.layer.borderWidth = 1
+//        mistakesView.layer.borderColor =
+        view.addSubview(mistakesView)
+        
+        
+        buttonsView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(buttonsView)
+    }
+    
+    func configLettersButtons() {
         let width = 40
         let height = 40
         var i = 0
-        
+
         for row in 0..<4 {
             for column in 0..<7 {
-            
-                let buttonTitle = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",  "U", "", "V", "W", "X", "Y", "Z", ""]
-                
+
                 let letterButton = UIButton(type: .system)
                 letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
                 letterButton.tintColor = .black
-                letterButton.setTitle(buttonTitle[ i ], for: .normal)
+                letterButton.setTitle(String(buttonTitle[ i ]), for: .normal)
                 letterButton.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
-                
+
                 let frame = CGRect(x: column * width, y: row * height, width: width, height: height)
                 letterButton.frame = frame
-                
+
                 buttonsView.addSubview(letterButton)
                 letterButtons.append(letterButton)
                 i += 1
             }
-            
+
         }
-        
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    func plusButton() {
+                plus.translatesAutoresizingMaskIntoConstraints = false
+                plus.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
+                plus.backgroundColor = .orange
+                view.addSubview(plus)
     }
+    
 
     @objc func letterTapped(_ sender: UIButton) {
+        
+//        let ac = UIAlertController(title: "Let's Go!", message: nil, preferredStyle: .alert)
+//        ac.addTextField()
+//
+//        let submitAction = UIAlertAction(title: "submit", style: .default) {
+//            [unowned self] _ in
+//            let answer = ac.textFields![0].text
+//            self.submit(answer!)
+//        }
+//        ac.addAction(submitAction)
+//        present(ac, animated: true)
+        
+        let butttonTapped = Array(_immutableCocoaArray: sender.titleLabel!) ?? ["!"]
+
+        if theWord.contains(butttonTapped[0]){
+            hideWord.append(contentsOf: butttonTapped[0])
+//            self.loadView()
+        }
     }
     
-//    @objc func submitTapped(_ sender: UIButton) {
-//
-//    }
-//
-//    @objc func clearTapped(_ sender: UIButton) {
-//
-//    }
+    func submit(_ answer:String) {
+        var strAnswer = answer
+        var charAnswer = Array(strAnswer)
+        
+        if strAnswer != "!" {
+            if splitWord.contains(charAnswer[0]) {
+            
+                splitWord.append(contentsOf: strAnswer)
+            
+                self.loadView()
+            }
+        }
+    }
 }
+
 
