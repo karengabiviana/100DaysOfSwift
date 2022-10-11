@@ -11,10 +11,10 @@ class ViewController: UIViewController {
     
     var allWords = [String]()
     var usedWords = [String]()
-    var theWord = String()
     
-    var splitWord = [Character]()
-    var hideWord = [Character]()
+    var word = String()
+    var usedLetters = [String]()
+    var displayWord = String()
     
     var mainLabel = UILabel()
     var scoreLabel = UILabel()
@@ -44,39 +44,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         integrateWordBase()
-        randomWord()
-        manipulateTheWord()
+        setRandomWord()
+        manipulateWord()
         
         configLabels()
         configViews()
         configLettersButtons()
-        
-        
-        // MARK: Constraints
-        NSLayoutConstraint.activate([
-            
-            scoreLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 16),
-            scoreLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            
-            mistakesView.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: 64),
-            mistakesView.bottomAnchor.constraint(equalTo: mainLabel.topAnchor, constant: -72),
-            mistakesView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            mistakesView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            
-            mainLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            mainLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            //            plus.centerXAnchor.constraint(equalTo: mainLabel.centerXAnchor),
-            //            plus.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
-            //            plus.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -160),
-            
-            buttonsView.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 40),
-            buttonsView.leadingAnchor.constraint(greaterThanOrEqualTo:  view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            buttonsView.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
-            
-        ])
-        
+        plusButton()
+     
     }
     
     
@@ -92,16 +69,32 @@ class ViewController: UIViewController {
         }
     }
     
-    func randomWord() {
-        theWord = allWords.randomElement() ?? "silkworm"
+    func setRandomWord() {
+        word = allWords.randomElement() ?? "silkworm"
     }
     
-    func manipulateTheWord() {
-        splitWord = Array(theWord)
+    func manipulateWord() {
         
-        for _ in splitWord {
-            hideWord.append(contentsOf: "?")
+        for letter in word {
+            let strLetter = String(letter)
+            
+            if usedLetters.contains(strLetter) {
+                displayWord += strLetter
+            } else {
+                displayWord += "?"
+            }
         }
+    
+    }
+    
+   @objc func checkingLetter() {
+       let letter = word.first ?? "@"
+       let strLetter = String(letter)
+       
+       usedLetters.append(strLetter)
+        manipulateWord()
+//        displayWord = ""
+    
     }
     
     func configLabels() {
@@ -111,10 +104,12 @@ class ViewController: UIViewController {
         view.addSubview(scoreLabel)
         
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
-        mainLabel.text = String(splitWord)
+        mainLabel.text = displayWord
         mainLabel.font = UIFont.systemFont(ofSize: 24)
         usedWords.removeAll(keepingCapacity: true)
         view.addSubview(mainLabel)
+        
+        constraintsLabels()
     }
     
     func configViews() {
@@ -128,6 +123,8 @@ class ViewController: UIViewController {
         
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(buttonsView)
+        
+        constraintsViews()
     }
     
     func configLettersButtons() {
@@ -157,11 +154,53 @@ class ViewController: UIViewController {
     
     func plusButton() {
         plus.translatesAutoresizingMaskIntoConstraints = false
-        plus.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
-        plus.backgroundColor = .orange
+        plus.setTitle("+", for: .normal)
+        plus.backgroundColor = .lightGray
         view.addSubview(plus)
+        
+        plus.addTarget(self, action: #selector(checkingLetter), for: .touchUpInside)
+        
+        constraintsPlusButton()
     }
     
+    func constraintsLabels() {
+        NSLayoutConstraint.activate([
+            
+            scoreLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 16),
+            scoreLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            
+            mainLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            mainLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+        ])
+    }
+    
+    func constraintsViews() {
+        NSLayoutConstraint.activate([
+            mistakesView.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: 64),
+            mistakesView.bottomAnchor.constraint(equalTo: mainLabel.topAnchor, constant: -72),
+            mistakesView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            mistakesView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            
+            buttonsView.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 40),
+            buttonsView.leadingAnchor.constraint(greaterThanOrEqualTo:  view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            buttonsView.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        ])
+    }
+    
+    
+    func constraintsPlusButton() {
+
+        
+        NSLayoutConstraint.activate([
+            plus.centerXAnchor.constraint(equalTo: mainLabel.centerXAnchor),
+            plus.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
+            plus.widthAnchor.constraint(equalToConstant: 40),
+            plus.heightAnchor.constraint(equalToConstant: 40)
+//            plus.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -160),
+        ])
+    
+    }
     
     @objc func letterTapped() {
         
@@ -185,17 +224,17 @@ class ViewController: UIViewController {
     }
     
     func submit(_ answer:String) {
-        var strAnswer = answer
-        var charAnswer = Array(strAnswer)
-        
-        if strAnswer != "!" {
-            if splitWord.contains(charAnswer[0]) {
-                
-                splitWord.append(contentsOf: strAnswer)
-                
-                self.loadView()
-            }
-        }
+//        var strAnswer = answer
+//        var charAnswer = Array(strAnswer)
+//
+//        if strAnswer != "!" {
+//            if splitWord.contains(charAnswer[0]) {
+//
+//                splitWord.append(contentsOf: strAnswer)
+//
+//                self.loadView()
+//            }
+//        }
     }
 }
 
