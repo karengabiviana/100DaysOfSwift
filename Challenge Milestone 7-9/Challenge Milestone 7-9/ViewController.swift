@@ -84,15 +84,16 @@ class ViewController: UIViewController {
                 displayWord += "?"
             }
         }
-    
+
     }
     
    @objc func checkingLetter() {
        let letter = word.first ?? "@"
        let strLetter = String(letter)
        
-       usedLetters.append(strLetter)
+        usedLetters.append(strLetter)
         manipulateWord()
+        mainLabel.text = displayWord
 //        displayWord = ""
     
     }

@@ -7,7 +7,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "9D8632AA-849C-41D9-8957-7B7E27FAFAD4"
+            uuid = "88523CA5-E1A4-4BA1-89F3-6EEF627FB90F"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -17,7 +17,7 @@
             startingLineNumber = "95"
             endingLineNumber = "95"
             landmarkName = "checkingLetter()"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
