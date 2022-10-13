@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     var allWords = [String]()
     var usedWords = [String]()
     var usedLetters = [String]()
+    var wrongLetters = [String]()
     
     var word = String()
     var letter = String()
@@ -20,13 +21,13 @@ class ViewController: UIViewController {
     var mainLabel = UILabel()
     var scoreLabel = UILabel()
     
-    var plus = UIButton()
-
-    var buttonsView = UIView()
-    var mistakesView = UIView()
+    var slotMistakes = [UIButton]()
+    
+    var mistakesView = UIStackView()
     
     let buttonTitle = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",  "U", "", "V", "W", "X", "Y", "Z", ""]
     
+    var mistakes = 0
     
     var score = 0 {
         didSet {
@@ -84,6 +85,7 @@ class ViewController: UIViewController {
                 displayWord += "?"
             }
         }
+        
     }
     
     func configLabels() {
@@ -103,22 +105,38 @@ class ViewController: UIViewController {
     
     func configViews() {
         mistakesView.translatesAutoresizingMaskIntoConstraints = false
-        //        mistakesView.backgroundColor = .orange
         mistakesView.layer.cornerRadius = 16
         mistakesView.layer.borderWidth = 1
-        //        mistakesView.layer.borderColor =
         view.addSubview(mistakesView)
         
-        
-        buttonsView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(buttonsView)
+        mistakesView.axis = .horizontal
+        mistakesView.alignment = .center
+        mistakesView.distribution = .fillEqually
+        mistakesView.spacing = 4
+
         
         constraintsViews()
+        addSlotsMistakes()
     }
+    
+    func addSlotsMistakes() {
+       
+        for number in 1...7 {
+            let slot = UIButton()
+            slot.setTitle(String(number), for: .normal)
+            slot.layer.borderWidth = 1
+            slot.layer.cornerRadius = 16
+            slot.backgroundColor = .white
+            mistakesView.addArrangedSubview(slot)
+            slotMistakes.append(slot)
+        }
+    }
+    
     
     func configLettersButtons() {
         let width = 40
         let height = 40
+        
         var i = 0
         
         for row in 0..<4 {
@@ -159,16 +177,12 @@ class ViewController: UIViewController {
             mistakesView.bottomAnchor.constraint(equalTo: mainLabel.topAnchor, constant: -72),
             mistakesView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             mistakesView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            
-            buttonsView.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 40),
-            buttonsView.leadingAnchor.constraint(greaterThanOrEqualTo:  view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            buttonsView.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        
         ])
     }
     
     
     @objc func checkingLetter(_ button: UIButton) {
-
         
         let titleLetter = button.titleLabel?.text ?? "!"
         let strLetter = String(titleLetter)
@@ -178,13 +192,14 @@ class ViewController: UIViewController {
         displayWord = ""
         wordContainsLetter()
         mainLabel.text = displayWord
-    
+        button.isEnabled = false
+        
+        if !word.contains(strLetter) {
+            wrongLetters.append(strLetter)
+            slotMistakes[mistakes].setTitle(strLetter, for: .normal)
+            slotMistakes[mistakes].backgroundColor = .lightGray
+
+            mistakes += 1
+        }
     }
-    
-   @objc func changeColorButton(_ button: UIButton) {
-        button.backgroundColor = .cyan
-    }
-    
 }
-
-
