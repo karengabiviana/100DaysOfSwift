@@ -20,10 +20,10 @@ class ViewController: UIViewController {
     
     var mainLabel = UILabel()
     var scoreLabel = UILabel()
-    
-    var slotMistakes = [UIButton]()
+    var slotMistakes = [UILabel]()
     
     var mistakesView = UIStackView()
+    var showMistakesView = UIView()
     
     let buttonTitle = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",  "U", "", "V", "W", "X", "Y", "Z", ""]
     
@@ -104,16 +104,17 @@ class ViewController: UIViewController {
     }
     
     func configViews() {
-        mistakesView.translatesAutoresizingMaskIntoConstraints = false
-        mistakesView.layer.cornerRadius = 16
-        mistakesView.layer.borderWidth = 1
-        view.addSubview(mistakesView)
+        showMistakesView.translatesAutoresizingMaskIntoConstraints = false
+        showMistakesView.layer.cornerRadius = 16
+        showMistakesView.layer.borderWidth = 1
+        view.addSubview(showMistakesView)
         
+        mistakesView.translatesAutoresizingMaskIntoConstraints = false
         mistakesView.axis = .horizontal
         mistakesView.alignment = .center
         mistakesView.distribution = .fillEqually
         mistakesView.spacing = 4
-
+        showMistakesView.addSubview(mistakesView)
         
         constraintsViews()
         addSlotsMistakes()
@@ -122,11 +123,15 @@ class ViewController: UIViewController {
     func addSlotsMistakes() {
        
         for number in 1...7 {
-            let slot = UIButton()
-            slot.setTitle(String(number), for: .normal)
+            let slot = UILabel()
+            slot.text = String(number)
+            slot.textColor = .lightGray
+            slot.textAlignment = .center
             slot.layer.borderWidth = 1
-            slot.layer.cornerRadius = 16
+            slot.layer.cornerRadius = 10
+            slot.layer.borderColor = .init(gray: 0.6, alpha: 1)
             slot.backgroundColor = .white
+            
             mistakesView.addArrangedSubview(slot)
             slotMistakes.append(slot)
         }
@@ -148,7 +153,7 @@ class ViewController: UIViewController {
                 letterButton.setTitle(String(buttonTitle[ i ]), for: .normal)
                 letterButton.addTarget(self, action: #selector(checkingLetter), for: .touchUpInside)
                 
-                let frame = CGRect(x: 16 + (column * width), y: 320 + (row * height), width: width, height: height)
+                let frame = CGRect(x: 32 + (column * width), y: 400 + (row * height), width: width, height: height)
                 letterButton.frame = frame
                 
                 view.addSubview(letterButton)
@@ -173,10 +178,15 @@ class ViewController: UIViewController {
     
     func constraintsViews() {
         NSLayoutConstraint.activate([
-            mistakesView.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: 64),
-            mistakesView.bottomAnchor.constraint(equalTo: mainLabel.topAnchor, constant: -72),
-            mistakesView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            mistakesView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            showMistakesView.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: 64),
+            showMistakesView.bottomAnchor.constraint(equalTo: mainLabel.topAnchor, constant: -72),
+            showMistakesView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            showMistakesView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            
+            mistakesView.topAnchor.constraint(equalTo: showMistakesView.topAnchor, constant: 16),
+            mistakesView.bottomAnchor.constraint(equalTo: showMistakesView.bottomAnchor, constant: -16),
+            mistakesView.leadingAnchor.constraint(equalTo: showMistakesView.leadingAnchor, constant: 16),
+            mistakesView.trailingAnchor.constraint(equalTo: showMistakesView.trailingAnchor, constant: -16),
         
         ])
     }
@@ -196,8 +206,9 @@ class ViewController: UIViewController {
         
         if !word.contains(strLetter) {
             wrongLetters.append(strLetter)
-            slotMistakes[mistakes].setTitle(strLetter, for: .normal)
-            slotMistakes[mistakes].backgroundColor = .lightGray
+            slotMistakes[mistakes].text = strLetter
+            slotMistakes[mistakes].textColor = .black
+            slotMistakes[mistakes].layer.borderColor = .init(gray: 0, alpha: 1)
 
             mistakes += 1
         }
