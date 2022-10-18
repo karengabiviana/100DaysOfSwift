@@ -52,7 +52,7 @@ class ViewController: UIViewController {
         configLabels()
         configViews()
         configLettersButtons()
-     
+        
     }
     
     
@@ -121,7 +121,7 @@ class ViewController: UIViewController {
     }
     
     func addSlotsMistakes() {
-       
+        
         for number in 1...7 {
             let slot = UILabel()
             slot.text = String(number)
@@ -187,7 +187,7 @@ class ViewController: UIViewController {
             mistakesView.bottomAnchor.constraint(equalTo: showMistakesView.bottomAnchor, constant: -16),
             mistakesView.leadingAnchor.constraint(equalTo: showMistakesView.leadingAnchor, constant: 16),
             mistakesView.trailingAnchor.constraint(equalTo: showMistakesView.trailingAnchor, constant: -16),
-        
+            
         ])
     }
     
@@ -198,7 +198,7 @@ class ViewController: UIViewController {
         let strLetter = String(titleLetter)
         
         usedLetters.append(strLetter)
-       
+        
         displayWord = ""
         wordContainsLetter()
         mainLabel.text = displayWord
@@ -209,8 +209,19 @@ class ViewController: UIViewController {
             slotMistakes[mistakes].text = strLetter
             slotMistakes[mistakes].textColor = .black
             slotMistakes[mistakes].layer.borderColor = .init(gray: 0, alpha: 1)
-
+            
             mistakes += 1
+            
+        }
+        
+        validateScorePoints()
+    }
+    
+    func validateScorePoints() {
+        if mistakes < 7 && !displayWord.contains("?") {
+            score += 3
+        } else if mistakes == 7 {
+            score -= 1
         }
     }
 }
