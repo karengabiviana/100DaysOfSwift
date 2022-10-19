@@ -220,8 +220,37 @@ class ViewController: UIViewController {
     func validateScorePoints() {
         if mistakes < 7 && !displayWord.contains("?") {
             score += 3
+            alert(if: true)
         } else if mistakes == 7 {
             score -= 1
+            alert(if: false)
         }
     }
+    
+    func alert(if status: Bool) {
+        var titleAlert: String
+        var messageAlert: String
+        
+        switch status {
+        case true:
+            titleAlert = "Good Game!"
+            messageAlert = "Your score is \(score).\n Let's go to the next word?"
+        case false:
+            titleAlert = "Sorry!"
+            messageAlert = "Your score is \(score).\n Good Luck with the next!"
+        }
+        
+        let ac = UIAlertController(title: titleAlert, message: messageAlert, preferredStyle: .alert)
+        
+        let newGame = UIAlertAction(title: "Zero Score", style: .destructive)
+        let revealWord = UIAlertAction(title: "Reveal Word", style: .default)
+        let nextWord = UIAlertAction(title: "Next Word", style: .default, handler:showRealWord )
+        
+        ac.addAction(newGame)
+        ac.addAction(nextWord)
+        ac.addAction(revealWord)
+        
+        present(ac, animated: true)
+    }
+    
 }
