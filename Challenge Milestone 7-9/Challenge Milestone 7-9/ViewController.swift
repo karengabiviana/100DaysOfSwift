@@ -134,7 +134,7 @@ class ViewController: UIViewController {
                 letterButton.setTitle(String(buttonTitle[ i ]), for: .normal)
                 letterButton.addTarget(self, action: #selector(checkingLetter), for: .touchUpInside)
                 
-                let frame = CGRect(x: 32 + (column * width), y: 400 + (row * height), width: width, height: height)
+                let frame = CGRect(x: 48 + (column * width), y: 480 + (row * height), width: width, height: height)
                 letterButton.frame = frame
                 
                 view.addSubview(letterButton)
